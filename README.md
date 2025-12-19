@@ -46,3 +46,6 @@ git clone https://github.com/suhana-shaik26/ai-study-planner.git
 cd ai-study-planner
 npm install
 npm start
+## open
+
+http://localhost:3000
