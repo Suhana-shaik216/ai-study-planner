@@ -1,38 +1,130 @@
-.App {
+/* RESET */
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* PAGE BACKGROUND */
+body {
+  margin: 0;
+  background-color: #f3f4f6;
+}
+
+/* MAIN CONTAINER */
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* HEADING */
+h1 {
   text-align: center;
+  color: #2563eb;
+  margin-bottom: 25px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* INPUTS */
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* BUTTONS */
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 15px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+button:hover {
+  background-color: #1e40af;
+}
+
+/* TABLE */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+/* TABLE HEAD */
+.table th {
+  background-color: #2563eb;
   color: white;
+  padding: 10px;
 }
 
-.App-link {
-  color: #61dafb;
+/* TABLE CELLS */
+.table td {
+  border: 1px solid #e5e7eb;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* PROGRESS BAR BOX */
+.progress-box {
+  background-color: #e5e7eb;
+  border-radius: 20px;
+  height: 22px;
+  overflow: hidden;
+}
+
+/* PROGRESS BAR */
+.progress-bar {
+  height: 100%;
+  background-color: #22c55e;
+  color: white;
+  font-size: 12px;
+  line-height: 22px;
+  text-align: center;
+  transition: width 0.3s ease;
+}
+
+/* MARK DONE BUTTON */
+.progress-btn {
+  background-color: #16a34a;
+  font-size: 13px;
+  padding: 7px 10px;
+}
+
+.progress-btn:hover {
+  background-color: #15803d;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .container {
+    margin: 20px;
+    padding: 20px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .table th,
+  .table td {
+    font-size: 12px;
+    padding: 8px;
   }
+}
+.delete-btn {
+  background-color: #dc2626;
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+.delete-btn:hover {
+  background-color: #991b1b;
 }
