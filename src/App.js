@@ -21,9 +21,11 @@ function App() {
   // Add subject
   const addSubject = () => {
     if (!subject || !hours || !deadline) {
-      alert("Please fill all fields");
+      alert("Fill all fields");
       return;
     }
+
+    const today = new Date().toISOString().split("T")[0];
 
     setSubjects([
       ...subjects,
@@ -31,7 +33,8 @@ function App() {
         id: Date.now(),
         name: subject,
         deadline,
-        startDate: new Date().toISOString().split("T")[0],
+        startDate: today,
+        completedDays: [],
       },
     ]);
 
@@ -44,58 +47,45 @@ function App() {
     setSubjects(subjects.filter((s) => s.id !== id));
   };
 
-  // Deadline-based progress
+  // Mark today as done
+  const markTodayDone = (id) => {
+    const today = new Date().toISOString().split("T")[0];
+
+    setSubjects(
+      subjects.map((s) => {
+        if (s.id !== id) return s;
+
+        if (s.completedDays.includes(today)) {
+          alert("Today's work already marked as done!");
+          return s;
+        }
+
+        return {
+          ...s,
+          completedDays: [...s.completedDays, today],
+        };
+      })
+    );
+  };
+
+  // Correct progress calculation
   const getProgress = (s) => {
     const start = new Date(s.startDate);
     const end = new Date(s.deadline);
-    const today = new Date();
-
-    if (today < start) return 0;
 
     const totalDays = Math.max(
-      Math.ceil((end - start) / (1000 * 60 * 60 * 24)),
+      Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1,
       1
     );
 
-    const elapsedDays = Math.min(
-      Math.ceil((today - start) / (1000 * 60 * 60 * 24)),
-      totalDays
-    );
+    const completed = s.completedDays.length;
 
-    return Math.round((elapsedDays / totalDays) * 100);
+    return Math.min(Math.round((completed / totalDays) * 100), 100);
   };
 
-  // 🔥 AI SMART HOURS DISTRIBUTION
-  const getSmartHours = () => {
-    const totalDailyHours = Number(hours);
-    if (!totalDailyHours || subjects.length === 0) return {};
-
-    let totalWeight = 0;
-
-    const weights = subjects.map((s) => {
-      const daysRemaining = Math.max(
-        Math.ceil(
-          (new Date(s.deadline) - new Date()) / (1000 * 60 * 60 * 24)
-        ),
-        1
-      );
-      const weight = 1 / daysRemaining;
-      totalWeight += weight;
-      return { id: s.id, weight };
-    });
-
-    const distributed = {};
-    weights.forEach((w) => {
-      distributed[w.id] = (
-        (w.weight / totalWeight) *
-        totalDailyHours
-      ).toFixed(2);
-    });
-
-    return distributed;
-  };
-
-  const smartHours = getSmartHours();
+  // Divide daily hours equally (simple version)
+  const dividedHours =
+    subjects.length > 0 ? (hours / subjects.length).toFixed(1) : 0;
 
   return (
     <div className="container">
@@ -108,7 +98,6 @@ function App() {
       />
 
       <input
-        type="number"
         placeholder="Total daily study hours"
         value={hours}
         onChange={(e) => setHours(e.target.value)}
@@ -127,17 +116,17 @@ function App() {
           <thead>
             <tr>
               <th>Subject</th>
-              <th>Daily Hours (AI)</th>
+              <th>Daily Hours</th>
               <th>Deadline</th>
               <th>Progress</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {subjects.map((s) => (
               <tr key={s.id}>
                 <td>{s.name}</td>
-                <td>{smartHours[s.id]} hrs</td>
+                <td>{dividedHours} hrs</td>
                 <td>{s.deadline}</td>
                 <td>
                   <div className="progress-box">
@@ -151,10 +140,16 @@ function App() {
                 </td>
                 <td>
                   <button
+                    className="done-btn"
+                    onClick={() => markTodayDone(s.id)}
+                  >
+                    Mark Today Done
+                  </button>
+                  <button
                     className="delete-btn"
                     onClick={() => deleteSubject(s.id)}
                   >
-                    ❌
+                    Delete
                   </button>
                 </td>
               </tr>
